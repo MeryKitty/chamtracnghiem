@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">ChamTracNghiem</string>
     <string name="takePhoto">Take a Photo</string>
+    <string name="sendButton">Send</string>
+    <string name="cropButton">Crop</string>
+    <string name="backButton">New Photo</string>
 </resources>

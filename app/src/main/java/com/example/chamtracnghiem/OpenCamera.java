@@ -7,7 +7,10 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.SurfaceTexture;
@@ -18,7 +21,9 @@ import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
@@ -26,11 +31,21 @@ import android.util.Size;
 import android.view.Display;
 import android.view.Surface;
 import android.view.TextureView;
+import android.view.View;
+import android.widget.Button;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collections;
 
 public class OpenCamera extends AppCompatActivity {
     private TextureView textureView;
+    private File tempFolder;
+    private Button photoButton;
     private CameraManager cameraManager;
     private int cameraFacing;
     private String cameraId;
@@ -43,7 +58,7 @@ public class OpenCamera extends AppCompatActivity {
         @Override
         public void onOpened(CameraDevice cameraDevice) {
             OpenCamera.this.cameraDevice = cameraDevice;
-            createPreviewSession();
+            showCameraCapture();
         }
 
         @Override
@@ -64,10 +79,16 @@ public class OpenCamera extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_camera);
-
-        textureView = (TextureView) findViewById(R.id.texture_view);
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-
+        photoButton = findViewById(R.id.take_photo);
+        photoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveTempImageFile();
+                openEditScreen();
+            }
+        });
+        textureView = (TextureView) findViewById(R.id.textureView);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_REQUEST_CODE);
         cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         cameraFacing = CameraCharacteristics.LENS_FACING_BACK;
 
@@ -85,6 +106,7 @@ public class OpenCamera extends AppCompatActivity {
 
             @Override
             public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
+                closeCamera();
                 return false;
             }
 
@@ -93,6 +115,11 @@ public class OpenCamera extends AppCompatActivity {
 
             }
         };
+    }
+    
+    private void openEditScreen(){
+        Intent intent = new Intent(this, EditPhoto.class);
+        startActivity(intent);
     }
 
     private void setUpCamera(){
@@ -169,7 +196,7 @@ public class OpenCamera extends AppCompatActivity {
         }
     }
 
-    private void createPreviewSession() {
+    private void showCameraCapture() {
         try {
             Point size = new Point();
             getWindowManager().getDefaultDisplay().getSize(size);
@@ -208,4 +235,32 @@ public class OpenCamera extends AppCompatActivity {
         }
     }
 
+    private void saveTempImageFile(){
+        createTempPhotoFolder();
+        OutputStream outputPhoto = null;
+        try {
+            outputPhoto = new FileOutputStream(File.createTempFile("temp", ".jpg", tempFolder));
+            textureView.getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, outputPhoto);
+            outputPhoto.flush();
+            outputPhoto.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try{
+                if (outputPhoto != null){
+                    outputPhoto.close();
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private void createTempPhotoFolder(){
+        tempFolder = new File(Environment.getExternalStorageDirectory() + "/CTNtemp");
+        if (!tempFolder.exists()){
+            boolean res = tempFolder.mkdir();
+        }
+    }
 }
