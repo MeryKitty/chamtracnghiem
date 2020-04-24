@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ChamTracNghiem</string>
+    <string name="takePhoto">Take a Photo</string>
 </resources>
