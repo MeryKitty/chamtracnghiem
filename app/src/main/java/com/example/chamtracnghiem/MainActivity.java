@@ -8,6 +8,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
     private Button takePhotoButton;
+    private Button makeAnswerkey;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,8 +20,20 @@ public class MainActivity extends AppCompatActivity {
                 openPhotoScreen();
             }
         });
+
+        makeAnswerkey = findViewById(R.id.taodapan);
+        makeAnswerkey.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAnswerKeyScreen();
+            }
+        });
     }
 
+    public void openAnswerKeyScreen(){
+        Intent intent = new Intent(this,PreQuestion.class);
+        startActivity(intent);
+    }
 
     public void openPhotoScreen(){
         Intent intent = new Intent(this,OpenCamera.class);

@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.example.chamtracnghiem.R;
+
 import java.util.List;
 
 public class QuestionAdapter extends ArrayAdapter<Question> {
@@ -32,8 +34,8 @@ public class QuestionAdapter extends ArrayAdapter<Question> {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(this.layoutResourceId, parent, false);
             holder = new MatrixHolder();
-            holder.id = (TextView) row.findViewById(android.R.id.questionId);
-            holder.answers = (RadioGroup) row.findViewById(android.R.id.questionAnswers);
+            holder.id = (TextView) row.findViewById(R.id.questionId);
+            holder.answers = (RadioGroup) row.findViewById(R.id.questionAnswers);
             holder.answers.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -47,7 +49,7 @@ public class QuestionAdapter extends ArrayAdapter<Question> {
         }
 
         Question question = this.questions.get(position);
-        holder.id.setText(question.id);
+        holder.id.setText(Integer.toString(question.id));
         holder.answers.setTag(position);
         if (question.answer != -1) {
             holder.answers.check(question.answer);
