@@ -11,8 +11,7 @@
         android:id="@+id/backButton"
         android:layout_width="88dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:gravity="center"
         android:layout_marginStart="33dp"
         android:layout_marginTop="97dp"
         android:text="@string/backButton" />
@@ -58,7 +57,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="306dp"
         android:layout_marginEnd="162dp"
-        android:text="Score"
         android:textSize="36sp"
         app:textAllCaps="false" />
 
