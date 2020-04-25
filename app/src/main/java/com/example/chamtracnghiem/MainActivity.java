@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         takePhotoButton = (Button) findViewById(R.id.takePhoto);
+        takePhotoButton.setText(getResources().getText(R.string.takePhoto));
         takePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         makeAnswerkey = findViewById(R.id.taodapan);
+        makeAnswerkey.setText(getResources().getText(R.string.make_answer_key));
         makeAnswerkey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
