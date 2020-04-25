@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.TextureView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -43,7 +44,9 @@ public class EditPhoto extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_edit_photo);
+
         textView = findViewById(R.id.score);
         previewPhoto = findViewById(R.id.preview_photo);
         previewPhoto.setImageBitmap(BitmapFactory.decodeFile(getExternalFilesDir( Environment.DIRECTORY_PICTURES)+"/temp_pic.jpg"));

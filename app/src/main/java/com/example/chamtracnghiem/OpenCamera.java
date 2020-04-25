@@ -33,6 +33,7 @@ import android.view.Display;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -84,7 +85,10 @@ public class OpenCamera extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_main);
         setContentView(R.layout.activity_open_camera);
+
         photoButton = findViewById(R.id.take_photo);
         photoButton.setOnClickListener(new View.OnClickListener() {
             @Override
