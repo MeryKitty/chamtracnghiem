@@ -15,7 +15,7 @@ import java.util.List;
 
 public class QuestionAdapter extends ArrayAdapter<Question> {
     Context context;
-    int layoutResourceId;
+    private int layoutResourceId;
     List<Question> questions;
 
     public QuestionAdapter(Context context, int layoutResourceId, List<Question> questions) {
@@ -41,6 +41,7 @@ public class QuestionAdapter extends ArrayAdapter<Question> {
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     int pos = (int) group.getTag();
                     questions.get(pos).answer = group.getCheckedRadioButtonId();
+                    AnswerKey.add(questions.get(pos));
                 }
             });
             row.setTag(holder);

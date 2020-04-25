@@ -28,13 +28,16 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.chamtracnghiem.model.AnswerKey;
 
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Map;
 
 public class EditPhoto extends AppCompatActivity {
     Button backButton;
@@ -42,8 +45,10 @@ public class EditPhoto extends AppCompatActivity {
     Button sendButton;
     TextView textView;
     ImageView previewPhoto;
-    String photoPath = getExternalFilesDir( Environment.DIRECTORY_PICTURES)+"/temp_pic.jpg";
+    String photoPath;
     String photoToString;  //to be sent to server
+    int imageWidth;
+    int imageHeight;
 
 
     @Override
@@ -51,10 +56,14 @@ public class EditPhoto extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_edit_photo);
+        photoPath = getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/temp_pic.jpg";
 
         textView = findViewById(R.id.score);
         previewPhoto = findViewById(R.id.preview_photo);
-        previewPhoto.setImageBitmap(BitmapFactory.decodeFile(photoPath));
+        Bitmap tempPhoto = BitmapFactory.decodeFile(photoPath);
+        imageHeight = tempPhoto.getHeight();
+        imageWidth = tempPhoto.getWidth();
+        previewPhoto.setImageBitmap(tempPhoto);
         //previewPhoto.invalidate();
 
         backButton = findViewById(R.id.backButton);
@@ -90,15 +99,14 @@ public class EditPhoto extends AppCompatActivity {
             textView.setText("No file to send");
             return;
         }
-        String url = "localhost:1999";
+        String url = "http://localhost:1999";
         RequestQueue queue = Volley.newRequestQueue(this);
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.PUT, url, null, new Response.Listener<JSONObject>() {
+        StringRequest stringRequest = new StringRequest
+                (Request.Method.PUT, url, new Response.Listener<String>() {
                     //TODO: find jsonRequest input (now null)
                     @Override
-                    public void onResponse(JSONObject response) {
-                        textView.setText("Something something");
+                    public void onResponse(String response) {
+                        textView.setText(response);
                         Toast toast = Toast.makeText(EditPhoto.this, "Graded!", Toast.LENGTH_SHORT);
                         toast.show();
                     }
@@ -111,9 +119,18 @@ public class EditPhoto extends AppCompatActivity {
                         Toast toast = Toast.makeText(EditPhoto.this, "Error getting to server", Toast.LENGTH_SHORT);
                         toast.show();
                     }
-                });
+                }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = AnswerKey.getKey();
+                params.put("image",photoToString);
+                params.put("image_width",Integer.toString(imageWidth));
+                params.put("image_height",Integer.toString(imageHeight));
+                return params;
+            }
+        };
 
-        queue.add(jsonObjectRequest);
+        queue.add(stringRequest);
 
     }
 }
