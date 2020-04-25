@@ -14,6 +14,7 @@ import android.graphics.SurfaceTexture;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
+import org.apache.commons.io.FileUtils;
 import android.view.TextureView;
 import android.view.View;
 import android.view.WindowManager;
@@ -32,6 +33,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Base64;
 
 public class EditPhoto extends AppCompatActivity {
     Button backButton;
@@ -39,6 +42,8 @@ public class EditPhoto extends AppCompatActivity {
     Button sendButton;
     TextView textView;
     ImageView previewPhoto;
+    String photoPath = getExternalFilesDir( Environment.DIRECTORY_PICTURES)+"/temp_pic.jpg";
+    String photoToString;  //to be sent to server
 
 
     @Override
@@ -49,7 +54,7 @@ public class EditPhoto extends AppCompatActivity {
 
         textView = findViewById(R.id.score);
         previewPhoto = findViewById(R.id.preview_photo);
-        previewPhoto.setImageBitmap(BitmapFactory.decodeFile(getExternalFilesDir( Environment.DIRECTORY_PICTURES)+"/temp_pic.jpg"));
+        previewPhoto.setImageBitmap(BitmapFactory.decodeFile(photoPath));
         //previewPhoto.invalidate();
 
         backButton = findViewById(R.id.backButton);
@@ -77,7 +82,14 @@ public class EditPhoto extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void sendAnswerSheet(){
+    public void sendAnswerSheet() {
+        try {
+            byte[] fileContent = FileUtils.readFileToByteArray(new File(photoPath));
+            photoToString = Base64.getEncoder().encodeToString(fileContent);
+        } catch (IOException e){
+            textView.setText("No file to send");
+            return;
+        }
         String url = "localhost:1999";
         RequestQueue queue = Volley.newRequestQueue(this);
 

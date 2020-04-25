@@ -4,7 +4,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class Question {
-    public static int nbQuestion = 50;
+    public static int nbQuestion = 30;
     public int id;
     public int answer;
 
