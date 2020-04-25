@@ -83,7 +83,6 @@ public class EditPhoto extends AppCompatActivity {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.PUT, url, null, new Response.Listener<JSONObject>() {
-
                     //TODO: find jsonRequest input (now null)
                     @Override
                     public void onResponse(JSONObject response) {
