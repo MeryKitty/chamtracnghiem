@@ -32,11 +32,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.chamtracnghiem.model.AnswerKey;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
 
 public class EditPhoto extends AppCompatActivity {
@@ -49,7 +51,6 @@ public class EditPhoto extends AppCompatActivity {
     String photoToString;  //to be sent to server
     int imageWidth;
     int imageHeight;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,12 +102,35 @@ public class EditPhoto extends AppCompatActivity {
         }
         String url = "http://localhost:1999";
         RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest
-                (Request.Method.PUT, url, new Response.Listener<String>() {
+        JSONObject body;
+        try {
+            body = new JSONObject();
+            body.put("image", photoToString);
+            body.put("image_height", imageHeight);
+            body.put("image_width", imageWidth);
+            JSONObject correct = new JSONObject();
+            for (Map.Entry<String, String> entry : AnswerKey.getKey().entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                correct.put(key, value);
+            }
+            body.put("correct", correct);
+        } catch (JSONException e) {
+            textView.setText("JSON Error Before Send Request");
+            return;
+        }
+
+        JsonObjectRequest stringRequest = new JsonObjectRequest
+                (Request.Method.POST, url, body, new Response.Listener<JSONObject>() {
                     //TODO: find jsonRequest input (now null)
                     @Override
-                    public void onResponse(String response) {
-                        textView.setText(response);
+                    public void onResponse(JSONObject response) {
+                        try {
+                            textView.setText("Total Score: " + Integer.toString(response.getInt("score")));
+                        } catch (JSONException e) {
+                            textView.setText("JSON Error After Send Request");
+                            return;
+                        }
                         Toast toast = Toast.makeText(EditPhoto.this, "Graded!", Toast.LENGTH_SHORT);
                         toast.show();
                     }
@@ -120,14 +144,7 @@ public class EditPhoto extends AppCompatActivity {
                         toast.show();
                     }
                 }){
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = AnswerKey.getKey();
-                params.put("image",photoToString);
-                params.put("image_width",Integer.toString(imageWidth));
-                params.put("image_height",Integer.toString(imageHeight));
-                return params;
-            }
+
         };
 
         queue.add(stringRequest);
