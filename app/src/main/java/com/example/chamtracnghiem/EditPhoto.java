@@ -33,7 +33,7 @@ public class EditPhoto extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_photo);
         previewPhoto = findViewById(R.id.preview_photo);
-        previewPhoto.setImageBitmap(BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()+"CTNtemp/temp.jpg"));
+        previewPhoto.setImageBitmap(BitmapFactory.decodeFile(getExternalFilesDir( Environment.DIRECTORY_PICTURES)+"/temp_pic.jpg"));
         //previewPhoto.invalidate();
 
         backButton = findViewById(R.id.backButton);

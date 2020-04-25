@@ -11,6 +11,7 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.SurfaceTexture;
@@ -33,6 +34,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,8 +45,12 @@ import java.nio.file.Paths;
 import java.util.Collections;
 
 public class OpenCamera extends AppCompatActivity {
+    private Button backButton;
+    private Button cropButton;
+    private Button sendButton;
+    private ImageView previewPhoto;
+
     private TextureView textureView;
-    private File tempFolder;
     private Button photoButton;
     private CameraManager cameraManager;
     private int cameraFacing;
@@ -84,6 +90,7 @@ public class OpenCamera extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveTempImageFile();
+                closeCamera();
                 openEditScreen();
             }
         });
@@ -106,7 +113,6 @@ public class OpenCamera extends AppCompatActivity {
 
             @Override
             public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-                closeCamera();
                 return false;
             }
 
@@ -118,6 +124,16 @@ public class OpenCamera extends AppCompatActivity {
     }
     
     private void openEditScreen(){
+       /* setContentView(R.layout.activity_edit_photo);
+        previewPhoto = findViewById(R.id.preview_photo);
+        previewPhoto.setImageBitmap(BitmapFactory.decodeFile(Environment.DIRECTORY_PICTURES+"temp.jpg"));
+        //previewPhoto.invalidate();
+
+        backButton = findViewById(R.id.backButton);
+
+        sendButton = findViewById(R.id.sendButton);
+        cropButton = findViewById(R.id.cropButton);*/
+
         Intent intent = new Intent(this, EditPhoto.class);
         startActivity(intent);
     }
@@ -236,31 +252,16 @@ public class OpenCamera extends AppCompatActivity {
     }
 
     private void saveTempImageFile(){
-        createTempPhotoFolder();
-        OutputStream outputPhoto = null;
+        File tempFolder = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         try {
-            outputPhoto = new FileOutputStream(File.createTempFile("temp", ".jpg", tempFolder));
-            textureView.getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, outputPhoto);
+            Files.deleteIfExists(Paths.get(tempFolder + "/temp_pic.jpg"));
+            OutputStream outputPhoto = new FileOutputStream(new File(tempFolder + "/temp_pic.jpg"));
+            boolean res = textureView.getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, outputPhoto);
             outputPhoto.flush();
             outputPhoto.close();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try{
-                if (outputPhoto != null){
-                    outputPhoto.close();
-                }
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-
         }
     }
 
-    private void createTempPhotoFolder(){
-        tempFolder = new File(Environment.getExternalStorageDirectory() + "/CTNtemp");
-        if (!tempFolder.exists()){
-            boolean res = tempFolder.mkdir();
-        }
-    }
 }
