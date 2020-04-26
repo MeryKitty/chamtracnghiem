@@ -136,7 +136,7 @@ public class EditPhoto extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        textView.setText("Total Score: 4");//"Error getting to server, status code : " + error.toString());
+                        textView.setText("Error getting to server, status code : " + error.toString());
                         Toast toast = Toast.makeText(EditPhoto.this, "Error getting to server", Toast.LENGTH_SHORT);
                         toast.show();
                     }
