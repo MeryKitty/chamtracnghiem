@@ -75,8 +75,8 @@ public class EditPhoto extends AppCompatActivity {
             }
         });
 
-        sendButton = findViewById(R.id.sendButton);
         //TODO: send photo to server
+        sendButton = findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,6 +85,12 @@ public class EditPhoto extends AppCompatActivity {
         });
 
         cropButton = findViewById(R.id.cropButton);
+        cropButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cropImage();
+            }
+        });
     }
 
     public void openPhotoScreen(){
@@ -148,6 +154,10 @@ public class EditPhoto extends AppCompatActivity {
         };
 
         queue.add(stringRequest);
+
+    }
+
+    public void cropImage() {
 
     }
 }
