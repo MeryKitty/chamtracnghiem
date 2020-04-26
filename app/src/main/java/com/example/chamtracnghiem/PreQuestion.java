@@ -50,7 +50,7 @@ public class PreQuestion extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (buttonClickable){
-                    Intent intent = new Intent(PreQuestion.this, QuestionActivity.class);
+                    Intent intent = new Intent(PreQuestion.this, NewQuestionActivity.class);
                     startActivity(intent);
                 }
             }
