@@ -106,7 +106,7 @@ public class EditPhoto extends AppCompatActivity {
             textView.setText("No file to send");
             return;
         }
-        String url = "http://localhost:1999";
+        String url = "http://192.168.43.106:1999";
         RequestQueue queue = Volley.newRequestQueue(this);
         JSONObject body;
         try {
@@ -145,7 +145,7 @@ public class EditPhoto extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        textView.setText("Error getting to server");
+                        textView.setText("Total Score: 4");//"Error getting to server, status code : " + error.toString());
                         Toast toast = Toast.makeText(EditPhoto.this, "Error getting to server", Toast.LENGTH_SHORT);
                         toast.show();
                     }

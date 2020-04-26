@@ -1,16 +1,16 @@
 <resources>
     <string name="app_name">ChamTracNghiem</string>
-    <string name="takePhoto">Take a Photo</string>
-    <string name="sendButton">Send</string>
-    <string name="cropButton">Crop</string>
-    <string name="backButton">New Photo</string>
+    <string name="takePhoto">Chấm bài</string>
+    <string name="sendButton">Gửi</string>
+    <string name="cropButton">Cắt ảnh</string>
+    <string name="backButton">Chụp lại</string>
     <string name="title_activity_question">QuestionActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-    <string name="make_answer_key">Make Answer Key</string>
+    <string name="make_answer_key">Nhập đáp án</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
