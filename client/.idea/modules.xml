@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ChamTracNghiem.iml" filepath="$PROJECT_DIR$/ChamTracNghiem.iml" group="ChamTracNghiem" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="ChamTracNghiem/app" />
+      <module fileurl="file://$PROJECT_DIR$/client-ChamTracNghiem.iml" filepath="$PROJECT_DIR$/client-ChamTracNghiem.iml" group="ChamTracNghiem" />
+    </modules>
+  </component>
+</project>
