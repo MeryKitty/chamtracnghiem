@@ -3,6 +3,7 @@ package com.example.chamtracnghiem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -30,6 +31,7 @@ public class QuestionActivity extends AppCompatActivity {
     private ListView questionListView;
     Button submit;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,12 +42,13 @@ public class QuestionActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendAnswerKey();
+                returnToMainMenu();
             }
         });
 
         List<Question> questionData = new ArrayList<>();
         for (int i = 1; i <= Question.nbQuestion; i++) {
+
             questionData.add(new Question(i));
         }
         QuestionAdapter adapter = new QuestionAdapter(this, R.layout.question, questionData);
@@ -53,31 +56,8 @@ public class QuestionActivity extends AppCompatActivity {
         questionListView.setAdapter(adapter);
     }
 
-    public void sendAnswerKey(){
-        String url = "localhost:1999";
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.PUT, url, null, new Response.Listener<JSONObject>() {
-
-                    //TODO: find jsonRequest input (now null)
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Toast toast = Toast.makeText(QuestionActivity.this, "Something something", Toast.LENGTH_SHORT);
-                        toast.show();
-
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-                        Toast toast = Toast.makeText(QuestionActivity.this, "Error getting to server", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                });
-
-        queue.add(jsonObjectRequest);
-
+    private void returnToMainMenu(){
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
     }
 }
